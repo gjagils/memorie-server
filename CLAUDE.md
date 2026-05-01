@@ -25,26 +25,35 @@ Geen ADR = geen architectuurkeuze. "We doen het wel even zo" is geen geldige wer
 - **Repo:** `gjagils/memorie-server` (public, AGPL-3.0).
 - **Deploy-doel:** Synology via Portainer + GitHub Actions + Tailscale (zie `~/Github/project-template-synology.md` als referentie; pipeline in deze repo nog in te richten).
 
-## Project-structuur (target — ontstaat zodra pipeline en eerste code er staan)
+## Project-structuur
 
 ```
 .
-├── cmd/memorie/             # main.go entrypoint
+├── cmd/memorie/             # main.go entrypoint (alleen /health in v0)
 ├── internal/
-│   ├── photosource/         # PhotoSource interface + ImmichPhotoSource impl (ADR-0002)
-│   ├── memories/            # memory-card generatie, Person/Place/Event/Relationship
-│   └── http/                # HTTP-handlers
+│   ├── photosource/         # PhotoSource interface (ADR-0002) — impl volgt
+│   ├── memories/            # memory-card generatie (komt) — Person/Place/Event/Relationship
+│   └── http/                # HTTP-handlers (komt)
 ├── migrations/              # Goose migration files
 ├── docs/decisions/          # ADRs
 ├── PERSONAS.md
 ├── CLAUDE.md
-├── Dockerfile
-├── docker-compose.yml
-└── .github/workflows/deploy.yml
+├── Dockerfile               # multi-stage, distroless static, multi-arch
+├── docker-compose.yml       # 1 service, named volume voor SQLite
+├── .env.example
+└── .github/workflows/deploy.yml   # build → GHCR → Tailscale → Portainer
+```
+
+## Lokaal draaien
+
+```bash
+go run ./cmd/memorie
+# → http://localhost:8090/health
 ```
 
 ## Pending (bekend werk)
 
-- LICENSE staat nog op MIT, moet AGPL-3.0 worden (Linear GJA-56).
-- Pipeline (Dockerfile, GH Actions, Portainer-deploy) nog niet ingericht.
 - iOS-repo nog niet aangemaakt (Linear GJA-57).
+- Eerste echte schema-migratie (Person/Place/Event/Relationship per datamodel) — Linear GJA-61.
+- `ImmichPhotoSource` implementatie + auth-koppeling (latere ADR voor auth).
+- Litestream-replicatie (latere ADR).

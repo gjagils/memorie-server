@@ -1,0 +1,25 @@
+# Build artifacts
+/bin/
+/out/
+*.exe
+*.test
+
+# Coverage
+*.out
+coverage.txt
+
+# Local data (SQLite db files)
+/data/
+*.db
+*.db-shm
+*.db-wal
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

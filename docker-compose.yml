@@ -1,0 +1,17 @@
+services:
+  memorie:
+    image: ghcr.io/gjagils/memorie-server:latest
+    container_name: memorie
+    restart: unless-stopped
+    ports:
+      - "${MEMORIE_HOST_PORT:-8090}:8090"
+    environment:
+      - PORT=8090
+      - IMMICH_URL=${IMMICH_URL:-}
+      - IMMICH_API_KEY=${IMMICH_API_KEY:-}
+      - DATABASE_PATH=/data/memorie.db
+    volumes:
+      - memorie-data:/data
+
+volumes:
+  memorie-data:
