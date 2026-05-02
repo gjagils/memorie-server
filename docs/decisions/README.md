@@ -46,3 +46,5 @@ Voor je een architectuurkeuze maakt of een bestaande omgooit:
 |---|---|---|---|
 | [0001](0001-stack-go-sqlite-single-binary.md) | Stack: Go + SQLite + single binary | 2026-05-01 | Accepted |
 | [0002](0002-immich-integratie-pure-api-laag.md) | Immich-integratie: pure API-laag | 2026-05-01 | Accepted |
+| [0003](0003-migrations-via-separate-binary.md) | Migrations via separate `cmd/migrate/` binary | 2026-05-02 | Accepted |
+| [0004](0004-immich-auth-shared-api-key.md) | Immich auth via shared API key | 2026-05-02 | Accepted |
