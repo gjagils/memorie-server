@@ -16,9 +16,35 @@ Zie [ADR-0001](docs/decisions/0001-stack-go-sqlite-single-binary.md) voor het wa
 ## Lokaal draaien (development)
 
 ```bash
+# Server starten
 go run ./cmd/memorie
 # → http://localhost:8090/health
+
+# Schema-migraties tegen een lokale SQLite
+DATABASE_PATH=./memorie.db go run ./cmd/migrate up
+
+# Tests
+go test ./...
 ```
+
+## Schema migrations (ADR-0003)
+
+Migrations staan als plain `.sql` in [`migrations/`](migrations/) en zitten via `//go:embed` in de `migrate` binary. App-startup runt **geen** migrations — dat is een bewuste keuze.
+
+Drie commando's, ongeacht omgeving:
+
+```bash
+# Lokaal
+DATABASE_PATH=./memorie.db go run ./cmd/migrate <up|down|status|version>
+
+# Productie (Synology, naast de draaiende stack)
+docker exec memorie /migrate up
+
+# Productie one-shot (zonder running container)
+docker run --rm -v memorie-data:/data ghcr.io/gjagils/memorie-server:latest /migrate up
+```
+
+Schema-change-flow: migration toevoegen → `migrate up` op prod → nieuwe app-code deployen. Bij issue: nieuwe reverse-migration of `migrate down`.
 
 ## Deploy
 

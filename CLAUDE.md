@@ -29,16 +29,18 @@ Geen ADR = geen architectuurkeuze. "We doen het wel even zo" is geen geldige wer
 
 ```
 .
-├── cmd/memorie/             # main.go entrypoint (alleen /health in v0)
+├── cmd/
+│   ├── memorie/             # main.go entrypoint (alleen /health in v0)
+│   └── migrate/             # Goose migration runner (ADR-0003)
 ├── internal/
 │   ├── photosource/         # PhotoSource interface (ADR-0002) — impl volgt
 │   ├── memories/            # memory-card generatie (komt) — Person/Place/Event/Relationship
 │   └── http/                # HTTP-handlers (komt)
-├── migrations/              # Goose migration files
+├── migrations/              # Goose migration files (.sql) + embed.go
 ├── docs/decisions/          # ADRs
 ├── PERSONAS.md
 ├── CLAUDE.md
-├── Dockerfile               # multi-stage, distroless static, multi-arch
+├── Dockerfile               # multi-stage, distroless static, multi-arch — bouwt memorie + migrate
 ├── docker-compose.yml       # 1 service, named volume voor SQLite
 ├── .env.example
 └── .github/workflows/deploy.yml   # build → GHCR → Tailscale → Portainer
@@ -47,13 +49,15 @@ Geen ADR = geen architectuurkeuze. "We doen het wel even zo" is geen geldige wer
 ## Lokaal draaien
 
 ```bash
-go run ./cmd/memorie
-# → http://localhost:8090/health
+go run ./cmd/memorie                              # server op :8090
+DATABASE_PATH=./memorie.db go run ./cmd/migrate up   # schema-migratie
+go test ./...                                     # tests
 ```
+
+Zie [README.md](README.md) voor het volledige overzicht (migrate-commando's prod/one-shot).
 
 ## Pending (bekend werk)
 
 - iOS-repo nog niet aangemaakt (Linear GJA-57).
-- Eerste echte schema-migratie (Person/Place/Event/Relationship per datamodel) — Linear GJA-61.
-- `ImmichPhotoSource` implementatie + auth-koppeling (latere ADR voor auth).
+- `ImmichPhotoSource` implementatie (Health() in GJA-68, daarna asset-listing).
 - Litestream-replicatie (latere ADR).
