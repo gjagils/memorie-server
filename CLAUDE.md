@@ -33,7 +33,8 @@ Geen ADR = geen architectuurkeuze. "We doen het wel even zo" is geen geldige wer
 │   ├── memorie/             # main.go entrypoint (alleen /health in v0)
 │   └── migrate/             # Goose migration runner (ADR-0003)
 ├── internal/
-│   ├── photosource/         # PhotoSource interface (ADR-0002) — impl volgt
+│   ├── photosource/         # PhotoSource interface (ADR-0002)
+│   │   └── immich/          # Immich implementation (ADR-0004)
 │   ├── memories/            # memory-card generatie (komt) — Person/Place/Event/Relationship
 │   └── http/                # HTTP-handlers (komt)
 ├── migrations/              # Goose migration files (.sql) + embed.go
@@ -59,5 +60,6 @@ Zie [README.md](README.md) voor het volledige overzicht (migrate-commando's prod
 ## Pending (bekend werk)
 
 - iOS-repo nog niet aangemaakt (Linear GJA-57).
-- `ImmichPhotoSource` implementatie (Health() in GJA-68, daarna asset-listing).
+- `ImmichPhotoSource`: alleen `Health()` werkt — asset-listing + verdere methods komen.
+- `GET /memories/today` endpoint (GJA-69) — memorie-engine v0.
 - Litestream-replicatie (latere ADR).

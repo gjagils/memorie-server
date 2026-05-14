@@ -46,6 +46,17 @@ docker run --rm -v memorie-data:/data ghcr.io/gjagils/memorie-server:latest /mig
 
 Schema-change-flow: migration toevoegen → `migrate up` op prod → nieuwe app-code deployen. Bij issue: nieuwe reverse-migration of `migrate down`.
 
+## Immich-koppeling
+
+Memorie heeft een werkende Immich nodig ([ADR-0002](docs/decisions/0002-immich-integratie-pure-api-laag.md)). Zet in je `.env`:
+
+```
+IMMICH_URL=http://immich-server:2283
+IMMICH_API_KEY=<read-scope API key>
+```
+
+API-key aanmaken in Immich: **Account Settings → API Keys → New API Key** (read scope is genoeg voor v1, zie [ADR-0004](docs/decisions/0004-immich-auth-shared-api-key.md)).
+
 ## Deploy
 
 GitHub push → GitHub Actions (multi-arch build, GHCR push) → Tailscale → Portainer API → Synology Docker.
