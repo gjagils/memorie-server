@@ -48,7 +48,11 @@ func main() {
 func run(cmd string) error {
 	dbPath := getenv("DATABASE_PATH", "/data/memorie.db")
 
-	db, err := sql.Open("sqlite", dbPath+"?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)")
+	// Plain path — no WAL/pragmas during migrations. WAL gets enabled by
+	// the app binary at runtime (single-writer migrate doesn't need it,
+	// and modernc.org/sqlite's WAL init failed CANTOPEN on Synology
+	// btrfs/overlay2 even with correct volume permissions).
+	db, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return fmt.Errorf("open db at %s: %w", dbPath, err)
 	}
